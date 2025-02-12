@@ -1,0 +1,105 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Scene/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scene/Terreno.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scene/Blocco.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Script/Game.gd" type="Script" id=4]
+[ext_resource path="res://Assets/ui/VT323-Regular-pixel.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://Assets/Block/BG.png" type="Texture" id=6]
+[ext_resource path="res://Assets/sounds/bg_song.mp3" type="AudioStream" id=7]
+[ext_resource path="res://admob-lib/admob.gd" type="Script" id=8]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 21.3548
+height = 0.0
+
+[sub_resource type="DynamicFont" id=1]
+size = 50
+font_data = ExtResource( 5 )
+
+[node name="Game" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="AdMob" type="Node" parent="."]
+script = ExtResource( 8 )
+ads_using_consent = true
+
+[node name="Terra" type="Node2D" parent="."]
+
+[node name="Terreno" parent="Terra" instance=ExtResource( 2 )]
+position = Vector2( 32, 480 )
+
+[node name="Terreno2" parent="Terra" instance=ExtResource( 2 )]
+position = Vector2( 96, 480 )
+
+[node name="Terreno3" parent="Terra" instance=ExtResource( 2 )]
+position = Vector2( 160, 480 )
+
+[node name="Terreno4" parent="Terra" instance=ExtResource( 2 )]
+position = Vector2( 224, 480 )
+
+[node name="Terreno5" parent="Terra" instance=ExtResource( 2 )]
+position = Vector2( 288, 480 )
+
+[node name="Terreno6" parent="Terra" instance=ExtResource( 2 )]
+position = Vector2( 352, 480 )
+
+[node name="KinematicBody2D" parent="." instance=ExtResource( 1 )]
+position = Vector2( 83.86, 342.528 )
+
+[node name="Area2D" type="Area2D" parent="KinematicBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D/Area2D"]
+position = Vector2( 9.18568, -8.0625 )
+rotation = 0.736602
+shape = SubResource( 2 )
+
+[node name="Blocco" parent="." instance=ExtResource( 3 )]
+position = Vector2( 576, 384 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.8
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchor_left = -0.020946
+anchor_top = -0.0381994
+anchor_right = -0.020946
+anchor_bottom = 0.0118007
+margin_left = 53.4487
+margin_top = 86.9196
+margin_right = 93.4487
+margin_bottom = 126.92
+rect_scale = Vector2( 3, 3 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/HBoxContainer"]
+margin_top = 10.0
+margin_right = 20.0
+margin_bottom = 60.0
+custom_fonts/font = SubResource( 1 )
+text = "0"
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+scale = Vector2( 1.5, 1.5 )
+transform = Transform2D( 1.5, 0, 0, 1.5, 0, 0 )
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+z_index = -1
+motion_mirroring = Vector2( 2048, 2048 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2( 1024, 1024 )
+scale = Vector2( 16, 16 )
+texture = ExtResource( 6 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+autoplay = true
+
+[connection signal="body_entered" from="KinematicBody2D/Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
